@@ -1,13 +1,17 @@
 package ok.jf.notesapp.screens
 
+import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -19,10 +23,20 @@ import androidx.navigation.compose.rememberNavController
 import ok.jf.notesapp.navigation.NavRoute
 import ok.jf.notesapp.ui.theme.NotesAPPTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import ok.jf.notesapp.model.Note
+import ok.jf.notesapp.ui.theme.MainViewModel
+import ok.jf.notesapp.ui.theme.MainViewModelFactory
 
 @Composable
 fun MainScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val mViewModel: MainViewModel =
+        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+
+    val notes = mViewModel.readTest.observeAsState(listOf()).value
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -36,16 +50,21 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) {
-        Column() {
-            NoteItem(title = "Note1", subtitles = "Subtitles for note 1", navController = navController)
-            NoteItem(title = "Note2", subtitles = "Subtitles for note 2", navController = navController)
-            NoteItem(title = "Note3", subtitles = "Subtitles for note 3", navController = navController)
+//        Column() {
+//            NoteItem(title = "Note1", subtitles = "Subtitles for note 1", navController = navController)
+//            NoteItem(title = "Note2", subtitles = "Subtitles for note 2", navController = navController)
+//            NoteItem(title = "Note3", subtitles = "Subtitles for note 3", navController = navController)
+//        }
+        LazyColumn {
+            items(notes){ note ->
+                NoteItem(note = note, navController = navController)
+            }
         }
     }
 }
 
 @Composable
-fun NoteItem(title: String, subtitles: String, navController: NavHostController){
+fun NoteItem(note : Note, navController: NavHostController){
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,11 +79,11 @@ fun NoteItem(title: String, subtitles: String, navController: NavHostController)
 
         ) {
             Text(
-                text = title,
+                text = note.title,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = subtitles)
+            Text(text = note.subtitle)
         }
 
     }
