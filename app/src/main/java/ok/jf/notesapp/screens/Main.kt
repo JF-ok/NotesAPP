@@ -25,17 +25,12 @@ import ok.jf.notesapp.ui.theme.NotesAPPTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import ok.jf.notesapp.model.Note
 import ok.jf.notesapp.ui.theme.MainViewModel
-import ok.jf.notesapp.ui.theme.MainViewModelFactory
 
 @Composable
-fun MainScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
+    val notes = viewModel.readAllNotes().observeAsState(listOf()).value
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -50,16 +45,11 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) {
-//        Column() {
-//            NoteItem(title = "Note1", subtitles = "Subtitles for note 1", navController = navController)
-//            NoteItem(title = "Note2", subtitles = "Subtitles for note 2", navController = navController)
-//            NoteItem(title = "Note3", subtitles = "Subtitles for note 3", navController = navController)
-//        }
-//        LazyColumn {
-//            items(notes){ note ->
-//                NoteItem(note = note, navController = navController)
-//            }
-//        }
+        LazyColumn {
+            items(notes){ note ->
+                NoteItem(note = note, navController = navController)
+            }
+        }
     }
 }
 
@@ -93,6 +83,9 @@ fun NoteItem(note : Note, navController: NavHostController){
 @Composable
 fun prevMainScreen() {
     NotesAPPTheme {
-        MainScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val mViewModel: MainViewModel =
+            viewModel(factory = MainViewModel.MainViewModelFactory(context.applicationContext as Application))
+        MainScreen(navController = rememberNavController(), viewModel = mViewModel)
     }
 }

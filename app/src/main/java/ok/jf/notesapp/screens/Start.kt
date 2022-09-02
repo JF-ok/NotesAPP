@@ -16,16 +16,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ok.jf.notesapp.navigation.NavRoute
 import ok.jf.notesapp.ui.theme.MainViewModel
-import ok.jf.notesapp.ui.theme.MainViewModelFactory
 import ok.jf.notesapp.ui.theme.NotesAPPTheme
 import ok.jf.notesapp.utils.TYPE_FIREBASE
 import ok.jf.notesapp.utils.TYPE_ROOM
 
 @Composable
-fun StartScreen(navController: NavHostController) {
+fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
     val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+        viewModel(factory = MainViewModel.MainViewModelFactory(context.applicationContext as Application))
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -69,6 +68,9 @@ fun StartScreen(navController: NavHostController) {
 @Composable
 fun prevStartScreen() {
     NotesAPPTheme {
-        StartScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val mViewModel: MainViewModel =
+            viewModel(factory = MainViewModel.MainViewModelFactory(context.applicationContext as Application))
+        StartScreen(navController = rememberNavController(), viewModel = mViewModel)
     }
 }

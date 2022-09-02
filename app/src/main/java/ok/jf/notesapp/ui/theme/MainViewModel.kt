@@ -2,10 +2,9 @@ package ok.jf.notesapp.ui.theme
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ok.jf.notesapp.database.room.AppRoomDatabase
 import ok.jf.notesapp.database.room.repository.RoomRepository
 import ok.jf.notesapp.model.Note
@@ -20,7 +19,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun initDatabase(type: String, onSuccess: () -> Unit) {
         Log.d("checkData", "MainViewModel initDatabase with type: $type")
-        when(type) {
+        when (type) {
             TYPE_ROOM -> {
                 val dao = AppRoomDatabase.getInstance(context = context).getRoomDao()
                 REPOSITORY = RoomRepository(dao)
@@ -28,13 +27,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-}
 
-class MainViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(application = application) as T
+    fun addNote(note: Note, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.create(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
+    fun readAllNotes() = REPOSITORY.readAll
+
+    class MainViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+                return MainViewModel(application = application) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 }
