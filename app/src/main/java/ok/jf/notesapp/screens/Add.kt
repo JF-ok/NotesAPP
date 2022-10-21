@@ -22,8 +22,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ok.jf.notesapp.model.Note
 import ok.jf.notesapp.navigation.NavRoute
-import ok.jf.notesapp.ui.theme.MainViewModel
+import ok.jf.notesapp.MainViewModel
 import ok.jf.notesapp.ui.theme.NotesAPPTheme
+import ok.jf.notesapp.utils.Constants
 
 @Composable
 fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -37,7 +38,7 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Add new note",
+                text = Constants.Keys.ADD_NEW_NOTES,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -48,7 +49,7 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                 onValueChange = { title = it
                                 isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                                 },
-                label = { Text(text = "Note title") },
+                label = { Text(text = Constants.Keys.NOTE_TITLE) },
                 isError = title.isEmpty()
             )
             OutlinedTextField(
@@ -56,7 +57,7 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                 onValueChange = { subtitle = it
                                 isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                                 },
-                label = { Text(text = "Note title") },
+                label = { Text(text = Constants.Keys.NOTE_SUBTITLE) },
                 isError = subtitle.isEmpty()
             )
             Button(
@@ -69,7 +70,7 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
 
                 }
             ) {
-                Text(text = "Add note")
+                Text(text = Constants.Keys.ADD_NOTE)
             }
         }
     }

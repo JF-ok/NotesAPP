@@ -15,8 +15,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ok.jf.notesapp.navigation.NavRoute
-import ok.jf.notesapp.ui.theme.MainViewModel
+import ok.jf.notesapp.MainViewModel
 import ok.jf.notesapp.ui.theme.NotesAPPTheme
+import ok.jf.notesapp.utils.Constants.Keys.FIREBASE_DATABASE
+import ok.jf.notesapp.utils.Constants.Keys.ROOM_DATABASE
+import ok.jf.notesapp.utils.Constants.Keys.WHAT_WILL_WE_USE
 import ok.jf.notesapp.utils.TYPE_FIREBASE
 import ok.jf.notesapp.utils.TYPE_ROOM
 
@@ -33,7 +36,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Какую использовать базу данных?")
+            Text(text = WHAT_WILL_WE_USE)
             Button(
                 onClick = {
                     mViewModel.initDatabase(TYPE_ROOM) {
@@ -45,7 +48,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     .width(200.dp)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Room database")
+                Text(text = ROOM_DATABASE)
             }
             Button(
                 onClick = {
@@ -58,7 +61,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     .width(200.dp)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Firebase database")
+                Text(text = FIREBASE_DATABASE)
             }
         }
     }

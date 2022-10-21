@@ -1,4 +1,4 @@
-package ok.jf.notesapp.ui.theme
+package ok.jf.notesapp
 
 import android.app.Application
 import android.util.Log
@@ -9,7 +9,6 @@ import ok.jf.notesapp.database.room.AppRoomDatabase
 import ok.jf.notesapp.database.room.repository.RoomRepository
 import ok.jf.notesapp.model.Note
 import ok.jf.notesapp.utils.REPOSITORY
-import ok.jf.notesapp.utils.TYPE_FIREBASE
 import ok.jf.notesapp.utils.TYPE_ROOM
 import java.lang.IllegalArgumentException
 
@@ -31,6 +30,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addNote(note: Note, onSuccess: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.create(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun updateNote(note: Note, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.update(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun deleteNote(note: Note, onSuccess: () -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.delete(note = note) {
                 viewModelScope.launch(Dispatchers.Main) {
                     onSuccess()
                 }

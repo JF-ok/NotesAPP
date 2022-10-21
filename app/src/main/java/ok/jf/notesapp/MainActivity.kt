@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ok.jf.notesapp.navigation.NotesNavHost
-import ok.jf.notesapp.ui.theme.MainViewModel
 import ok.jf.notesapp.ui.theme.NotesAPPTheme
 
 class MainActivity : ComponentActivity() {
