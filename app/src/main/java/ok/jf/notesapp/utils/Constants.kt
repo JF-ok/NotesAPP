@@ -1,12 +1,14 @@
 package ok.jf.notesapp.utils
 
-import ok.jf.notesapp.database.DatabaseRepisitory
+import ok.jf.notesapp.database.DatabaseRepository
 
 const val TYPE_DATABASE = "type_database"
 const val TYPE_ROOM = "type_room"
 const val TYPE_FIREBASE = "type_firebase"
 
-lateinit var REPOSITORY: DatabaseRepisitory
+lateinit var REPOSITORY: DatabaseRepository
+lateinit var LOGIN: String
+lateinit var PASSWORD: String
 
 object Constants {
     object Keys {
@@ -29,6 +31,10 @@ object Constants {
         const val TITLE = "Title"
         const val SUBTITLE = "Subtitle"
         const val UPDATE_NOTE = "Update note"
+        const val SIGN_IN = "Sign in"
+        const val LOG_IN = "Log in"
+        const val LOGIN_TEXT = "Login"
+        const val PASSWORD_TEXT = "Password"
 
     }
 

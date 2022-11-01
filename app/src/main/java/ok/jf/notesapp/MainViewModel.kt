@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ok.jf.notesapp.database.firebase.AppFirebaseRepository
 import ok.jf.notesapp.database.room.AppRoomDatabase
 import ok.jf.notesapp.database.room.repository.RoomRepository
 import ok.jf.notesapp.model.Note
 import ok.jf.notesapp.utils.REPOSITORY
+import ok.jf.notesapp.utils.TYPE_FIREBASE
 import ok.jf.notesapp.utils.TYPE_ROOM
 import java.lang.IllegalArgumentException
 
@@ -23,6 +25,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val dao = AppRoomDatabase.getInstance(context = context).getRoomDao()
                 REPOSITORY = RoomRepository(dao)
                 onSuccess()
+            }
+            TYPE_FIREBASE -> {
+                REPOSITORY = AppFirebaseRepository()
+                REPOSITORY.connectToDatabase(
+                    {onSuccess()},
+                    {Log.d("checkData", "Error: ${it}")}
+                )
             }
         }
     }
